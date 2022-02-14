@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
@@ -21,6 +22,21 @@ class Livre
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $dateEdition;
+
+    public function __construct(array $init = [])
+    {
+        $this->hydrate($init);
+        $this->exemplaires = new ArrayCollection();    
+    }
+
+    public function hydrate (array $vals){
+        foreach ($vals as $key=> $val){
+            $method = "set" . ucfirst($key);
+            if (method_exists($this,$method)){
+                $this->$method ($val);
+            }
+        }
+    }
 
     public function getId(): ?int
     {

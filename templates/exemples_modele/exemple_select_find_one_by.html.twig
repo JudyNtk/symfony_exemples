@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% block body %}
+L'objet Livre reçu de la vue est :
+<h4>
+Titre : {{ livre.getTitre}}
+<br>
+ISBN : {{ livre.getIsbn }}
+</h4>
+{% endblock %}

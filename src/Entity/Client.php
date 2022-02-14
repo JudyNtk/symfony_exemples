@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
@@ -22,6 +23,22 @@ class Client
     #[ORM\Column(type: 'text', nullable: true)]
     private $email;
 
+    // créer un nouveau client
+    public function __construct(array $init = [])
+    {
+        $this->hydrate($init);
+        $this->clients = new ArrayCollection();
+    }
+
+    public function hydrate (array $vals){
+        foreach ($vals as $key=> $val){
+            $method = "set".ucfirst($key);
+            if (method_exists($this,$method)){
+                $this->$method ($val);
+            }
+        }
+    }
+    // ___________________________________________________________
     public function getId(): ?int
     {
         return $this->id;
